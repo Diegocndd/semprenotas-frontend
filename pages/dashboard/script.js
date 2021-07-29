@@ -53,7 +53,7 @@ const renderNotes = () => {
         containerNote.className = "note-label";
 
         boldNote.appendChild(document.createTextNode(element.title));
-        textNote.appendChild(document.createTextNode(element.text.substring(0, 55) + '...'));
+        textNote.appendChild(document.createTextNode(element.text.substring(0, 60) + '...'));
         titleNote.appendChild(boldNote);
         containerNote.appendChild(titleNote);
         containerNote.appendChild(textNote);
