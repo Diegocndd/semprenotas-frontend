@@ -103,3 +103,32 @@ a {
     width: 30%;
     height: 10%;
 }
+
+#header-calendar-bar {
+    background-color: white;
+    width: 90%;
+    height: 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+}
+
+#lateralbar {
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    display: flex;
+    overflow: auto; 
+    height: 100%;
+}
+
+.event-calendar {
+    background-color: white;
+    width: 90%;
+    margin-top: 10px;
+}
+
+.box-event-lateral-bar {
+    padding-left: 12px;
+}
