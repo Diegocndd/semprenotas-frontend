@@ -17,9 +17,9 @@ a {
     height: 20%;
     width: 100%;
     display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-end;
+    flex-direction: row;
+    justify-content:space-between;
+    align-items: center;
 }
 
 #lateralbar {
@@ -90,4 +90,33 @@ a {
     justify-content: space-around;
     border-radius: 10px;
     margin-top: 10px;
+}
+
+#header-calendar-bar {
+    background-color: white;
+    width: 90%;
+    height: 5%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+}
+
+#lateralbar {
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    display: flex;
+    overflow: auto; 
+    height: 100%;
+}
+
+.event-calendar {
+    background-color: white;
+    width: 90%;
+    margin-top: 10px;
+}
+
+.box-event-lateral-bar {
+    padding-left: 12px;
 }

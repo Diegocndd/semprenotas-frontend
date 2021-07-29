@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendário</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href='https://fonts.googleapis.com/css?family=Roboto' rel='stylesheet'>
+</head>
+<body>
+    <header id="header-dashboard">
+        <div style="width: 12%; height: 100%; justify-content: center; display: flex; align-items: center;">
+            <img src="../../img/user-white.png" width="90px" height="90px">
+        </div>
+        <div id="menu">
+            <a class="link-menu" href="../dashboard/dashboard.html">Anotações</a>
+            <a class="link-menu" href="../calendar/calendar.html">Calendário</a>
+            <a class="link-menu" href="../login/login.html">Sair</a>
+        </div>
+    </header>
+
+    <div id="content-body">
+        <div id="lateralbar">
+
+        </div>
+    
+        <div id="notes-container">
+            <div class="calendar-bar" style="margin-left: 50px; margin-right: 20px;">
+                <p class="title-calendar-bar">Calendário</p>
+                <div id="event-list" style="display: flex; align-items: center; flex-direction: column;">
+                    <!--
+                        <div class="event-label">
+                            <p><b>12/07/2021</b></p>
+                            <p>Evento 1</p>
+                        </div>
+                    !-->
+                </div>
+            </div>
+
+            <div class="calendar-bar">
+                <p class="title-calendar-bar">Criar Compromisso</p>
+                <div id="form">
+                    <input type="text" id="title_note" placeholder="Insira o nome do compromisso">
+                    <textarea id="text_note" placeholder="Insira a descrição do compromisso"></textarea>
+                    <input type="text" id="title_note" placeholder="Insira a data do compromisso">
+                    <input type="text" id="title_note" placeholder="Insira um participante">
+                    <button id="to-createnote-button">INSERIR COMPROMISSO</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
