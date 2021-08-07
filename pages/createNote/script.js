@@ -1,11 +1,36 @@
+"use strict";
+
+const userToken = sessionStorage.getItem('@semprenotas:token');
+
+if (userToken === '') {
+    document.location.href = '../login/login.html'
+}
+
 const createNoteButton = document.getElementById('to-createnote-button');
 
 createNoteButton.addEventListener("click", () => {
     const titleNote = document.getElementById('title_note').value;
     const textNote = document.getElementById('text_note').value;
 
-    console.log(titleNote);
-    console.log(textNote);
+    console.log(userToken);
+    const createNoteEndpoint = "http://localhost:8080/anotacao/";
+
+    (async () => {
+        const createNote = await fetch(createNoteEndpoint, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({token: userToken, nota: {title: titleNote, description: textNote}})
+        })
+        .then(response => {
+            if (response.status === 201 || response.status === 200) {
+                document.location.href = '../dashboard/dashboard.html';
+            }
+        })
+        .catch(error => console.log(error));
+      })();
 });
 
 
