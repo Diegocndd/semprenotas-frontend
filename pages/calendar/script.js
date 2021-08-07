@@ -1,5 +1,11 @@
 "use strict";
 
+const userToken = sessionStorage.getItem('@semprenotas:token');
+
+if (userToken === '') {
+    document.location.href = '../login/login.html'
+}
+
 const notes = [
     {
         id: 0,
