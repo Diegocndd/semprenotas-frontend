@@ -40,11 +40,9 @@ var notes = [
 ];
 
 (async () => {
-    console.log('http://localhost:8080/anotacao?token=' + userToken)
     await fetch('http://localhost:8080/anotacao?token=' + userToken)
         .then((resp) => resp.json())
         .then(function(data) {
-            console.log(data)
             notes = [];
             data.map(e => {
                 notes.push(e);
@@ -111,15 +109,19 @@ const renderNotes = () => {
     const notesContainer = document.getElementById("notes-container");
 
     notes.forEach(element => {
-        var mainContainer = document.createElement("div");
-        var containerNote = document.createElement("div");
-        var titleNote = document.createElement("p");
-        var textNote = document.createElement("p");
-        var boldNote = document.createElement("b");
+        const mainContainer = document.createElement("div");
+        const containerNote = document.createElement("div");
+        const titleNote = document.createElement("p");
+        const textNote = document.createElement("p");
+        const boldNote = document.createElement("b");
         containerNote.className = "note-label";
 
         boldNote.appendChild(document.createTextNode(element.title));
-        textNote.appendChild(document.createTextNode(element.description.substring(0, 60) + '...'));
+        textNote.appendChild(document.createTextNode(
+            element.description.length > 20
+            ? element.description.substring(0, 40) + '...'
+            : element.description));
+
         titleNote.appendChild(boldNote);
         titleNote.style = `
             width: 50%;

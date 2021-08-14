@@ -120,7 +120,6 @@ const dropdownEvents = () => {
         if (count > 2) {
             element.onclick = function(){
                 if (drops.indexOf(element) !== -1) {
-                    console.log(element.childNodes)
                     element.removeChild(element.childNodes[1]);
                     drops.splice(drops.indexOf(element), 1);
                 } else {

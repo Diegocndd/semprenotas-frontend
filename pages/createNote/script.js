@@ -12,7 +12,6 @@ createNoteButton.addEventListener("click", () => {
     const titleNote = document.getElementById('title_note').value;
     const textNote = document.getElementById('text_note').value;
 
-    console.log(userToken);
     const createNoteEndpoint = "http://localhost:8080/anotacao/";
 
     (async () => {
