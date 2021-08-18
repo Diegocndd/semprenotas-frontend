@@ -65,7 +65,7 @@ a {
     width: 70%;
 }
 
-#title_note {
+.input-event {
     height: 6%;
     margin-bottom: 10px;
     background-color: #f0f0f0;
@@ -75,7 +75,7 @@ a {
     font-size: 18px;
 }
 
-#text_note {
+#text_event {
     height: 20%;
     border-radius: 15px;
     background-color: #f0f0f0;

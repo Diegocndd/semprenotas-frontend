@@ -33,43 +33,72 @@ const notes = [
     },
 ];
 
-const events = [
+var events = [
     {
         id: 0,
         title: "Evento 1",
-        date: "02/05/2021",
+        description: "",
+        dateEvent: "02/05/2021",
         participants: ['Fulano', 'Sicrano'],
     },
-    {
-        id: 1,
-        title: "Evento 2",
-        date: "03/07/2021",
-        participants: [],
-    },
-    {
-        id: 2,
-        title: "Evento 3",
-        date: "12/05/2021",
-        participants: ['Sicrano', 'Beltrano'],
-    },
-    {
-        id: 3,
-        title: "Evento 4",
-        date: "22/04/2021",
-        participants: [],
-    },
-    {
-        id: 4,
-        title: "Evento 5",
-        date: "11/05/2021",
-        participants: [],
-    }
 ];
+
+// get eventos
+(async () => {
+    await fetch('http://localhost:8080/evento?token=' + userToken)
+        .then((resp) => resp.json())
+        .then(function(data) {
+            events = [];
+            data.map(e => {
+                events.push(e);
+            })
+            dropdownEvents();
+        })
+        .catch(error => console.log(error));
+})();
+
+const createNoteButton = document.getElementById('to-createnote-button');
+
+// criar eventos
+createNoteButton.addEventListener("click", () => {
+    const titleEvent = document.getElementById('title_event').value;
+    const textEvent = document.getElementById('text_event').value;
+    const dateEvent = document.getElementById('date_event').value;
+
+    const createEventEndpoint = "http://localhost:8080/evento/";
+
+    console.log(titleEvent, textEvent, dateEvent);
+
+    (async () => {
+        const createEvent = await fetch(createEventEndpoint, {
+          method: 'POST',
+          headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+              token: userToken,
+              evento: {
+                title: titleEvent,
+                date: dateEvent,
+                description: textEvent,
+              }})
+        })
+        .then(response => {
+            if (response.status === 201 || response.status === 200) {
+                location.reload();
+            }
+        })
+        .catch(error => console.log(error));
+      })();
+});
 
 const getEventByTitle = title => {
     var retEvent;
     events.forEach(event => {
         if (title === event.title) {
+            retEvent = event;
+        } else if (event.title.substring(0, 15) + '...' === title) {
             retEvent = event;
         }
     })
@@ -90,13 +119,13 @@ const dropdownEvents = () => {
         var titleEvent = document.createElement("p");
 
         // adiciona a data ao container
-        dateBold.appendChild(document.createTextNode(element.date));
+        dateBold.appendChild(document.createTextNode(element.dateEvent));
         date.appendChild(dateBold);
 
         texts.appendChild(date);
     
         // adiciona o título ao container
-        titleEvent.appendChild(document.createTextNode(element.title));
+        titleEvent.appendChild(document.createTextNode(element.title.length > 15 ? element.title.substring(0, 15) + '...' : element.title));
         texts.appendChild(titleEvent);
         texts.style = `
             display: flex;
@@ -117,12 +146,14 @@ const dropdownEvents = () => {
     const drops = new Array;
     
     allEvents.forEach(element => {
-        if (count > 2) {
+        if (element.toString() === '[object HTMLDivElement]') {
             element.onclick = function(){
                 if (drops.indexOf(element) !== -1) {
+                    console.log(456);
                     element.removeChild(element.childNodes[1]);
                     drops.splice(drops.indexOf(element), 1);
                 } else {
+                    console.log(123);
                     drops.push(element);
                     const drop = document.createElement("div");
                     drop.className = "drop-element";
@@ -134,6 +165,7 @@ const dropdownEvents = () => {
                     `;
 
                     var event = element.firstChild.children[1].textContent;
+
                     var titleEvent = document.createElement("p");
                     titleEvent.appendChild(document.createTextNode(event));
                     titleEvent.style = `
@@ -143,17 +175,26 @@ const dropdownEvents = () => {
                     `;
 
                     var dateEvent = document.createElement("p");
-                    dateEvent.appendChild(document.createTextNode('Data: ' + getEventByTitle(event).date))
+                    dateEvent.appendChild(document.createTextNode('Data: ' + getEventByTitle(event).dateEvent))
 
                     dateEvent.style = `
                         color: white;
                         margin-left: 20px;
                     `;
 
-                    drop.appendChild(titleEvent)
+                    var contentEvent = document.createElement("p");
+                    contentEvent.appendChild(document.createTextNode('Descrição: ' + getEventByTitle(event).description))
+
+                    contentEvent.style = `
+                        color: white;
+                        margin-left: 20px;
+                    `;
+
+                    drop.appendChild(titleEvent);
+                    drop.appendChild(contentEvent);
                     drop.appendChild(dateEvent);
 
-                    if (getEventByTitle(event).participants.length > 0) {
+                    if (getEventByTitle(event).participants && getEventByTitle(event).participants.length > 0) {
                         var participants = document.createElement("p");
                         participants.appendChild(document.createTextNode("Participantes:"));
     
@@ -181,8 +222,8 @@ const dropdownEvents = () => {
                     element.appendChild(drop);
                 }
             }
+            count += 1;
         }
-        count += 1;
     })
 }
 
@@ -212,5 +253,32 @@ const lateralBarEvents = () => {
 
 }
 
+const dateInputMask = (elm) => {
+    elm.addEventListener('keypress', function(e) {
+      if(e.keyCode < 47 || e.keyCode > 57) {
+        e.preventDefault();
+      }
+      
+      var len = elm.value.length;
+      
+      if(len !== 1 || len !== 3) {
+        if(e.keyCode == 47) {
+          e.preventDefault();
+        }
+      }
+      
+      if(len === 2) {
+        elm.value += '/';
+      }
+  
+      if(len === 5) {
+        elm.value += '/';
+      }
+    });
+};
+
+const inputDate = document.getElementById('date_event')
+
+dateInputMask(inputDate);
+
 lateralBarEvents();
-dropdownEvents();
