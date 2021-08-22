@@ -6,32 +6,20 @@ if (userToken === '') {
     document.location.href = '../login/login.html'
 }
 
-const notes = [
-    {
-        id: 0,
-        title: "Título da Nota 1",
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        date: "02/05/2021",
-    },
-    {
-        id: 1,
-        title: "Título da Nota 2",
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        date: "12/05/2021",
-    },
-    {
-        id: 2,
-        title: "Título da Nota 3",
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        date: "22/05/2021",
-    },
-    {
-        id: 3,
-        title: "Título da Nota 4",
-        text: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-        date: "15/06/2021",
-    },
-];
+var notes = [];
+
+(async () => {
+    await fetch('http://localhost:8080/anotacao?token=' + userToken)
+        .then((resp) => resp.json())
+        .then(function(data) {
+            notes = [];
+            data.map(e => {
+                notes.push(e);
+            })
+            lateralBarNotes();
+        })
+        .catch(error => console.log(error));
+})();
 
 var events = [
     {
@@ -66,8 +54,6 @@ createNoteButton.addEventListener("click", () => {
     const dateEvent = document.getElementById('date_event').value;
 
     const createEventEndpoint = "http://localhost:8080/evento/";
-
-    console.log(titleEvent, textEvent, dateEvent);
 
     (async () => {
         const createEvent = await fetch(createEventEndpoint, {
@@ -149,11 +135,9 @@ const dropdownEvents = () => {
         if (element.toString() === '[object HTMLDivElement]') {
             element.onclick = function(){
                 if (drops.indexOf(element) !== -1) {
-                    console.log(456);
                     element.removeChild(element.childNodes[1]);
                     drops.splice(drops.indexOf(element), 1);
                 } else {
-                    console.log(123);
                     drops.push(element);
                     const drop = document.createElement("div");
                     drop.className = "drop-element";
@@ -227,7 +211,7 @@ const dropdownEvents = () => {
     })
 }
 
-const lateralBarEvents = () => {
+const lateralBarNotes = () => {
 
     const lateralBar = document.getElementById("lateralbar");
 
@@ -243,7 +227,7 @@ const lateralBarEvents = () => {
         titleEvent.appendChild(boldTitle);
 
         var dateEvent = document.createElement("p");
-        dateEvent.appendChild(document.createTextNode(element.text.substring(0, 30) + '...'));
+        dateEvent.appendChild(document.createTextNode(element.description.substring(0, 30) + '...'));
 
         contentBoxEvent.appendChild(titleEvent);
         contentBoxEvent.appendChild(dateEvent);
@@ -280,5 +264,3 @@ const dateInputMask = (elm) => {
 const inputDate = document.getElementById('date_event')
 
 dateInputMask(inputDate);
-
-lateralBarEvents();

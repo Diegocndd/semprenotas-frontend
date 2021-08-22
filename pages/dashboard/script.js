@@ -1,7 +1,7 @@
 "use strict";
 
 const userToken = sessionStorage.getItem('@semprenotas:token');
-console.log(userToken);
+
 if (userToken === '') {
     document.location.href = '../login/login.html'
 }
@@ -39,6 +39,14 @@ var notes = [
     },
 ];
 
+const FormataStringData = data => {
+    var ano  = data.split("-")[0];
+    var mes  = data.split("-")[1];
+    var dia  = data.split("-")[2];
+  
+    return dia + '/' + mes + '/' + ano
+}
+
 (async () => {
     await fetch('http://localhost:8080/anotacao?token=' + userToken)
         .then((resp) => resp.json())
@@ -52,38 +60,21 @@ var notes = [
         .catch(error => console.log(error));
 })();
 
-const events = [
-    {
-        id: 0,
-        title: "Evento 1",
-        date: "02/05/2021",
-        participants: [],
-    },
-    {
-        id: 1,
-        title: "Evento 2",
-        date: "03/07/2021",
-        participants: [],
-    },
-    {
-        id: 2,
-        title: "Evento 3",
-        date: "12/05/2021",
-        participants: [],
-    },
-    {
-        id: 3,
-        title: "Evento 4",
-        date: "22/04/2021",
-        participants: [],
-    },
-    {
-        id: 4,
-        title: "Evento 5",
-        date: "11/05/2021",
-        participants: [],
-    },
-];
+var events = [];
+
+(async () => {
+    await fetch('http://localhost:8080/evento?token=' + userToken)
+        .then((resp) => resp.json())
+        .then(function(data) {
+            events = [];
+            data.map(e => {
+                events.push(e);
+            })
+            console.log(events);
+            lateralBarEvents();
+        })
+        .catch(error => console.log(error));
+})();
 
 const getNoteByTitle = title => {
     var retNote;
@@ -227,7 +218,7 @@ const lateralBarEvents = () => {
         titleEvent.appendChild(boldTitle);
 
         var dateEvent = document.createElement("p");
-        dateEvent.appendChild(document.createTextNode(element.date));
+        dateEvent.appendChild(document.createTextNode(element.dateEvent));
 
         contentBoxEvent.appendChild(titleEvent);
         contentBoxEvent.appendChild(dateEvent);
@@ -236,5 +227,3 @@ const lateralBarEvents = () => {
     })
 
 }
-
-lateralBarEvents();
